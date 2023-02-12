@@ -11,4 +11,4 @@ SELECT name, year_created  FROM collection WHERE date_part('year', year_created)
 
 SELECT name FROM artist WHERE name NOT LIKE '% %';
 
-SELECT name FROM track WHERE name LIKE '%my%';
+SELECT name FROM track WHERE name ILIKE ANY(ARRAY['%мой%', '%my%']);
