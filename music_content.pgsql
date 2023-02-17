@@ -48,6 +48,8 @@ INSERT INTO album VALUES(9, 'Title album', '2018');
 INSERT INTO artist_album VALUES(4, 9);
 INSERT INTO album VALUES(10, 'Name album', '2018');
 INSERT INTO artist_album VALUES(5, 10);
+INSERT INTO album VALUES(11, 'Name album 11', '2021');
+INSERT INTO artist_album VALUES(7, 11);
 
 INSERT INTO track VALUES(1, 'The Kids Arenot Alright', '2:59', 4);
 INSERT INTO track VALUES(2, 'Load', '3:57', 2);
@@ -57,14 +59,14 @@ INSERT INTO track VALUES(5, 'Мой Track5', '6:35', 7);
 INSERT INTO track VALUES(6, 'Track6 Мой', '5:57', 6);
 INSERT INTO track VALUES(7, 'Track7 My', '4:59', 9);
 INSERT INTO track VALUES(8, 'myTrack8', '3:24', 10);
-INSERT INTO track VALUES(9, 'Track9', '2:35', 4);
+INSERT INTO track VALUES(9, 'Track9', '3:00', 4);
 INSERT INTO track VALUES(10, 'Trackmy10', '5:37', 2);
 INSERT INTO track VALUES(11, 'Track11', '6:53', 8);
 INSERT INTO track VALUES(12, 'Track12', '4:26', 8);
 INSERT INTO track VALUES(13, 'Track My 13', '7:37', 7);
-INSERT INTO track VALUES(14, 'Track14', '2:48', 6);
+INSERT INTO track VALUES(14, 'Track14', '3:17', 6);
 INSERT INTO track VALUES(15, 'МойTrack15', '7:51', 5);
-INSERT INTO track VALUES(16, 'TrackMy16', '5:38', 4);
+INSERT INTO track VALUES(16, 'TrackMy16', '2:59', 1);
 INSERT INTO track VALUES(17, 'Track17', '5:29', 10);
 
 INSERT INTO collection VALUES(1, 'Collection1', '2018');
