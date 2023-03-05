@@ -1,40 +1,59 @@
 --1
-SELECT g.name, (SELECT count(artist_id) FROM genre_artist ga WHERE ga.genre_id = g.genre_id) AS a FROM genre g;
+SELECT g.name, count(artist_id) FROM genre g JOIN genre_artist USING(genre_id) JOIN artist USING(artist_id) GROUP BY g.name;
 
 --2
-SELECT count(*) FROM track WHERE album_id IN (SELECT album_id FROM album WHERE date_part('year', year) BETWEEN 2019 AND 2020);
+SELECT count(*) FROM track JOIN album USING(album_id) WHERE date_part('year', year) BETWEEN 2019 AND 2020;
 
 --3
-SELECT a.name, (SELECT avg(duration) FROM track t WHERE t.album_id = a.album_id) FROM album a;
+SELECT a.name, avg(duration) FROM album a JOIN track USING(album_id) GROUP BY a.name;
 
 --4
-SELECT name FROM artist WHERE artist_id NOT IN
-(SELECT artist_id FROM artist_album WHERE album_id IN 
-(SELECT album_id FROM album a WHERE date_part('year', year) = 2020));
+SELECT name FROM artist
+	LEFT JOIN (
+		SELECT artist_id, album_id
+		FROM artist_album
+		JOIN album USING(album_id)
+		WHERE date_part('year', year) = 2020) aa
+	USING(artist_id) 
+	WHERE aa.album_id IS NULL
+	ORDER BY name
+;
 
 --5
-SELECT name FROM collection WHERE collection_id IN
-(SELECT collection_id FROM collection_track WHERE track_id IN 
-(SELECT track_id FROM track WHERE album_id IN
-(SELECT album_id FROM album WHERE album_id IN
-(SELECT album_id FROM artist_album WHERE artist_id IN
-(SELECT artist_id FROM artist WHERE name = 'Metallica')))));
+SELECT c.name FROM collection c
+	JOIN collection_track ct USING(collection_id)
+	JOIN track USING(track_id)
+	JOIN album USING(album_id)
+	JOIN artist_album aa USING(album_id)
+	JOIN artist a USING(artist_id)
+	WHERE a.name = 'Metallica'
+;
 
 --6
-SELECT name FROM album WHERE album_id IN
-(SELECT album_id FROM artist_album WHERE artist_id IN
-(SELECT artist_id FROM genre_artist GROUP BY artist_id HAVING count(*) > 1));
+SELECT a.name FROM album a
+	JOIN artist_album USING(album_id)
+	JOIN genre_artist USING(artist_id)
+GROUP BY a.name
+HAVING count(*) > 1
+;
 
 --7
-SELECT name FROM track WHERE track_id NOT IN (SELECT DISTINCT track_id FROM collection_track);
+SELECT name FROM track 
+	LEFT JOIN collection_track USING(track_id) 
+WHERE collection_id IS NULL
+;
 
 --8
-SELECT name FROM artist WHERE artist_id IN
-(SELECT artist_id FROM artist_album WHERE album_id IN
-(SELECT album_id FROM track WHERE duration =
-(SELECT min(duration) FROM track)));
+SELECT a.name FROM artist a
+	JOIN artist_album USING(artist_id)
+	JOIN track USING(album_id)
+WHERE duration = (SELECT min(duration) FROM track)
+;
 
 --9
-SELECT name FROM album WHERE album_id IN (SELECT album_id FROM 
-(SELECT album_id, count(album_id) FROM track GROUP BY album_id) a 
-WHERE count = (SELECT min(count) FROM (SELECT album_id, count(album_id) FROM track GROUP BY album_id) a)); 
+SELECT a.name FROM album a
+    JOIN track t USING(album_id)
+GROUP BY album_id
+ORDER BY count(album_id)
+LIMIT 3
+; 
