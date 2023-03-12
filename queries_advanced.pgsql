@@ -52,8 +52,10 @@ WHERE duration = (SELECT min(duration) FROM track)
 
 --9
 SELECT a.name FROM album a
-    JOIN track t USING(album_id)
+	JOIN track USING(album_id)
 GROUP BY album_id
-ORDER BY count(album_id)
-LIMIT 3
-; 
+HAVING count(album_id) = (
+	SELECT count(album_id) FROM track
+	GROUP BY album_id
+	ORDER BY count ASC LIMIT 1)
+;
